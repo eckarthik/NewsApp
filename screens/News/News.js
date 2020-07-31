@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import NewsCard from '../../components/NewsCard/NewsCard';
 import AppHeader from '../../components/AppHeader/AppHeader';
-import {View,ScrollView,FlatList,RefreshControl} from 'react-native';
+import {View,ScrollView,FlatList,RefreshControl,BackHandler} from 'react-native';
 import Loader from '../../components/Loader/Loader';
 import NetInfo from "@react-native-community/netinfo";
 import Error from '../../components/Error/Error';
@@ -47,12 +47,21 @@ class News extends PureComponent {
     onRefresh = () => {
         this.fetchNewsArticles()
     }
-    
-    checkInternetConnectivity = () => {
-        this.fetchNewsArticles()
+
+    onBackButtonPress = () => {
+        BackHandler.exitApp()
     }
 
     componentDidMount() {
+        this.fetchNewsArticles()
+        BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPress);
+    }
+      
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPress);
+    }
+    
+    checkInternetConnectivity = () => {
         this.fetchNewsArticles()
     }
 

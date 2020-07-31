@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Text,TouchableOpacity,TextInput} from 'react-native';
+import {View,Text,TouchableOpacity,TextInput,BackHandler} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as constants from '../../constants';
 import styles from './styles';
@@ -53,6 +53,18 @@ class ChooseInterests extends Component {
             await AsyncStorage.setItem('newsCategories',json);
             this.props.navigation.navigate("NewsScreen",{categories:this.state.categories})
         }
+    }
+
+    onBackButtonPress = () => {
+        BackHandler.exitApp()
+    }
+
+    componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPress);
+    }
+      
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPress);
     }
 
     render() {
